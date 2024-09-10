@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,7 +14,8 @@ import lombok.Setter;
 public class Question {
     private String uri;
     private String questionText;
-    private String categoryUri; // Maybe not?
-    private String correctAnswerUri;
-    private String requiresAnswerTypeUri;
+    //private Category category;
+    private Answer correctAnswer;
+    private List<Answer> wrongAnswers;
+    private AnswerType requiredAnswerType;
 }

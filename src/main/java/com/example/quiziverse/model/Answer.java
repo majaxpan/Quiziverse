@@ -12,5 +12,6 @@ import lombok.Setter;
 public class Answer {
     private String uri;
     private String answerText;
+    private String answerType;
     private String answerTypeUri;
 }
