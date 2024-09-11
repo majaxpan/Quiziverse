@@ -12,10 +12,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Question {
+    //question id
     private String uri;
+    //actual question
     private String questionText;
-    //private Category category;
+    //the correct answer with uri and answer type
     private Answer correctAnswer;
+    //list of wrong answers with uri and answer type
     private List<Answer> wrongAnswers;
+    //the required answer type for this question
     private AnswerType requiredAnswerType;
 }
