@@ -10,8 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Answer {
+    //answer id
     private String uri;
+    //actual answer
     private String answerText;
-    private String answerType;
-    private String answerTypeUri;
+    //answer type
+    private AnswerType answerType;
 }

@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerType {
+    //answer type id
     private String uri;
+    //answer type name
     private String label;
 }
