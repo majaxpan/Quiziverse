@@ -4,6 +4,7 @@ import com.example.quiziverse.model.Answer;
 import com.example.quiziverse.model.Question;
 import com.example.quiziverse.service.AnswerService;
 import com.example.quiziverse.service.AnswerTypeService;
+import com.example.quiziverse.service.CategoryService;
 import com.example.quiziverse.service.QuestionService;
 import org.apache.jena.query.*;
 import org.springframework.stereotype.Service;
@@ -18,20 +19,45 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final AnswerService answerService;
     private final AnswerTypeService answerTypeService;
+    private final CategoryService categoryService;
 
-    public QuestionServiceImpl(AnswerService answerService, AnswerTypeService answerTypeService) {
+    public QuestionServiceImpl(AnswerService answerService, AnswerTypeService answerTypeService, CategoryService categoryService) {
         this.answerService = answerService;
         this.answerTypeService = answerTypeService;
+        this.categoryService = categoryService;
     }
 
     @Override
     public List<Question> getTenQuestions(String categoryName) {
+        //if specific category is selected, return 10 questions from that specific category
         if(!categoryName.equals("Random")){
             return getQuestionsFromCategory(categoryName);
         }
+        //if it is chosen to be random, return 10 questions no matter the category
         else return getQuestionsFromRandomCategories();
     }
 
+    //Sparql query to get 10 questions from certain category
+    private List<Question> getQuestionsFromCategory(String categoryName) {
+        List<Question> questions = new ArrayList<>();
+
+        String categoryUri = categoryService.getCategoryUriByName(categoryName).getUri();
+
+        String queryStr = String.format(
+                "PREFIX quiz: <http://example.com/quiz#> " +
+                        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+                        "SELECT ?question ?questionText ?correctAnswer ?correctAnswerText ?requiresAnswerType WHERE { " +
+                        "  ?question a quiz:Question ; " +
+                        "            quiz:questionText ?questionText ; " +
+                        "            quiz:correctAnswer ?correctAnswer ; " +
+                        "            quiz:requiresAnswerType ?requiresAnswerType ; " +
+                        "            quiz:belongsToCategory <%s> . " +
+                        "  ?correctAnswer quiz:answerText ?correctAnswerText . " +
+                        "} ORDER BY RAND() LIMIT 10", categoryUri);
+        return setData(questions, queryStr);
+    }
+
+    //Sparql query to get 10 questions no matter the category
     private List<Question> getQuestionsFromRandomCategories() {
         List<Question> questions = new ArrayList<>();
 
@@ -46,10 +72,10 @@ public class QuestionServiceImpl implements QuestionService {
                 "  ?correctAnswer quiz:answerText ?correctAnswerText . " +
                 "} ORDER BY RAND() LIMIT 10";
 
-        return getQuestions(questions, queryStr);
+        return setData(questions, queryStr);
     }
 
-    private void setData(List<Question> questions, String questionUri, String questionText, Answer correctAnswer) {
+    private void setQuestions(List<Question> questions, String questionUri, String questionText, Answer correctAnswer) {
         List<Answer> wrongAnswers = answerService.getThreeWrongAnswers(correctAnswer);
 
         Question question = new Question();
@@ -61,24 +87,9 @@ public class QuestionServiceImpl implements QuestionService {
         questions.add(question);
     }
 
-    private List<Question> getQuestionsFromCategory(String categoryUri) {
-        List<Question> questions = new ArrayList<>();
 
-        String queryStr = String.format(
-                "PREFIX quiz: <http://example.com/quiz#> " +
-                        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
-                        "SELECT ?question ?questionText ?correctAnswer ?correctAnswerText ?requiresAnswerType WHERE { " +
-                        "  ?question a quiz:Question ; " +
-                        "            quiz:questionText ?questionText ; " +
-                        "            quiz:correctAnswer ?correctAnswer ; " +
-                        "            quiz:requiresAnswerType ?requiresAnswerType ; " +
-                        "            quiz:belongsToCategory <%s> . " +
-                        "  ?correctAnswer quiz:answerText ?correctAnswerText . " +
-                        "} ORDER BY RAND() LIMIT 10", categoryUri);
-        return getQuestions(questions, queryStr);
-    }
 
-    private List<Question> getQuestions(List<Question> questions, String queryStr) {
+    private List<Question> setData(List<Question> questions, String queryStr) {
         Query query = QueryFactory.create(queryStr);
 
         try (QueryExecution qExec = QueryExecutionFactory.sparqlService(FUSEKI_URL, query)) {
@@ -98,7 +109,7 @@ public class QuestionServiceImpl implements QuestionService {
                 correctAnswer.setAnswerText(correctAnswerText);
                 correctAnswer.setAnswerType(answerTypeService.getAnswerTypeLabelByUri(answerTypeUri));
 
-                setData(questions, questionUri, questionText, correctAnswer);
+                setQuestions(questions, questionUri, questionText, correctAnswer);
             }
         } catch (Exception e) {
             e.printStackTrace();

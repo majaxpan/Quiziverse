@@ -31,6 +31,6 @@ public class AnswerTypeServiceImpl implements AnswerTypeService {
             e.printStackTrace();
         }
 
-        return null;  // Return null or handle error as needed
+        return null;
     }
 }
