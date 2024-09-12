@@ -1,0 +1,69 @@
+body {
+    background-image: url('../images/background.jpg');
+    background-size: cover; /* Ensures the image covers the entire screen */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents repeating the image */
+    background-attachment: fixed; /* Keeps the background fixed when scrolling */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.title {
+    font-family: 'Chewy', cursive;
+    font-size: 10rem;
+    margin-top: 100px;
+    margin-bottom: 20px;;
+    text-align: center;
+    color: #fff;
+    text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px  1px 0 #000,
+            1px  1px 0 #000;
+}
+.title-cat {
+    font-family: 'Open Sans', sans-serif;
+    color: #fff;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.btn-cat {
+    font-family: 'Open Sans', sans-serif;
+    width: 250px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid #ddd; /* Light gray border */
+    border-radius: 16px; /* Rounded corners */
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.btn-cat:hover {
+    background-color: rgba(255, 255, 255, 1); /* Change background on hover */
+    border-color: #bbb; /* Darker border on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+}
+
+.btn-cat:active {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly darker on click */
+    border-color: #aaa; /* Darker border on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow on click */
+    transform: translateY(2px); /* Slightly move the button down on click */
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
