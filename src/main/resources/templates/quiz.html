@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Quiz - [[${categoryName}]]</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/quiz.js"></script>
+</head>
+<body>
+<h1 class="title">Quiz - [[${categoryName}]]</h1>
+
+<div id="rules-dialog">
+  <p>Quiz rules...</p>
+  <button id="start-quiz">Start Quiz</button>
+</div>
+
+<div id="quiz-content" style="display:none;">
+  <div id="question-container"></div>
+  <p>Score: <span id="score">0</span></p>
+  <p>Lives: <span id="lives">3</span></p>
+  <p>Time Left: <span id="time">60</span> seconds</p>
+</div>
+
+<div id="end-dialog" style="display:none;">
+  <p id="end-message"></p>
+  <button id="restart-quiz">Restart Quiz</button>
+</div>
+</body>
+</html>

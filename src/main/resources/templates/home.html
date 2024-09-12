@@ -4,16 +4,20 @@
     <title>Quiz Categories</title>
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <h1 class="title">Quiziverse</h1>
 <h2 class="title-cat">Select a category</h2>
-<ul>
-    <li th:each="category : ${categories}">
-        <a th:href="@{'/quiz/' + ${category.label}}">
-            <button class="btn-cat" th:text="${category.label}"></button>
-        </a>
-    </li>
-</ul>
+<form id="category-form" action="/chooseCategory" method="post">
+    <ul>
+        <li th:each="category : ${categories}">
+            <button type="submit" name="categoryName" th:value="${category.label}" class="btn-cat">
+                <span th:text="${category.label}"></span>
+            </button>
+        </li>
+    </ul>
+</form>
 </body>
 </html>
+
