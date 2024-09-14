@@ -33,10 +33,9 @@ public class CategoryController {
 
     @PostMapping("/chooseCategory")
     public RedirectView chooseCategory(@RequestParam("categoryName") String categoryName) {
-        if (categoryName == null || categoryName.isEmpty()) {
-            throw new IllegalArgumentException("Category name is missing");
-        }
-        // Redirect to the QuizController with the categoryName as a parameter
-        return new RedirectView("/quiz?categoryName=" + categoryName);
+        // Redirect to the quiz page with the selected category
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/quiz?category=" + categoryName);
+        return redirectView;
     }
 }
