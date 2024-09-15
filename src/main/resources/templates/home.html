@@ -8,12 +8,56 @@
 <body>
 <h1 class="title">Quiziverse</h1>
 <h2 class="title-cat">Select a category</h2>
-<ul>
-    <li th:each="category : ${categories}">
-        <a th:href="@{'/quiz/' + ${category.label}}">
-            <button class="btn-cat" th:text="${category.label}"></button>
-        </a>
-    </li>
-</ul>
+
+<form id="category-form" action="/chooseCategory" method="post">
+    <ul>
+        <li th:each="category : ${categories}">
+            <button type="submit" name="categoryName" th:value="${category.label}" class="btn-cat">
+                <span th:text="${category.label}"></span>
+            </button>
+        </li>
+        <li>
+            <button type="submit" name="categoryName" value="Random" class="btn-cat">
+                <span>Random</span>
+            </button>
+        </li>
+    </ul>
+</form>
+
+
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <button class="btn-rules" onclick="openModal()">Rules</button>
+</div>
+
+<div id="rulesModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Quiz Rules</h3>
+        <p>1. The quiz has 10 questions.</p>
+        <p>2. You have 60 seconds to answer each question.</p>
+        <p>3. You can select one answer per question.</p>
+        <p>4. You can not go back to the previous question.</p>
+        <p>5. If your 60 seconds are up, the quiz is over.</p>
+        <p>5. Good luck!</p>
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById("rulesModal");
+
+    function openModal() {
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>
