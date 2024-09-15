@@ -11,20 +11,17 @@
 
     <style>
         .title {
+            margin-top: 50px;
             margin-bottom: 0;
         }
 
         li {
             margin-bottom: 15px;
         }
-
-        .submit-btn {
-            margin-top: 20px;
-        }
     </style>
 
     <script>
-        let remainingTime = [[${remainingTime}]];  // This value is passed from the backend
+        let remainingTime = [[${remainingTime}]];
 
         function startTimer() {
             const timerElement = document.getElementById('timer');
@@ -34,27 +31,24 @@
                     timerElement.textContent = remainingTime;
                 } else {
                     clearInterval(timerInterval);
-                    window.location.href = "/game-over";  // Redirect when time is up
+                    window.location.href = "/quiz-over";
                 }
             }, 1000);
         }
 
         window.onload = function() {
-            startTimer();  // Start the countdown only once when the quiz begins
+            startTimer();
 
             const answerButtons = document.querySelectorAll('.answer-button');
-            const hiddenInput = document.querySelector('input[name="answer"]');
+            const hiddenInput = document.querySelector('input[name="selectedAnswer"]');
 
             answerButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Remove selected class from all buttons
                     answerButtons.forEach(btn => btn.classList.remove('selected'));
 
-                    // Add selected class to the clicked button
                     this.classList.add('selected');
 
-                    // Set the selected answer value in the form
-                    hiddenInput.value = this.dataset.value;
+                    hiddenInput.value = this.getAttribute('data-value');
                 });
             });
         };
@@ -62,47 +56,37 @@
 </head>
 <body>
 
-<!-- Title -->
 <h1 class="title">Quiziverse</h1>
 
-<!-- Timer Display -->
 <div class="container quiz-container">
-    <div class="timer">
-        Time left: <span id="timer">[[${remainingTime}]]</span> seconds
+    <div class="header-grid">
+        <div class="question-header">
+            <h3>Question [[${currentIndex + 1}]] of [[${totalQuestions}]]</h3>
+        </div>
+        <div class="timer">
+            Time left: <span id="timer">[[${remainingTime}]]</span> s
+        </div>
     </div>
 
-    <div class="question-header">
-        <h3>Question [[${currentIndex + 1}]] of [[${totalQuestions}]]</h3>
-    </div>
+    <h4 class="question-text" th:text="${question.questionText}"></h4>
 
-    <!-- Display the current question -->
-    <h4 th:text="${question.questionText}"></h4>
-
-    <!-- Answer Form -->
     <form id="quizForm" action="/answer" method="post">
         <ul class="answer-buttons-container">
-            <!-- Display correct answer -->
-            <li>
-                <button type="button" class="btn-cat answer-button" data-value="${question.correctAnswer.answerText}">
-                    <span th:text="${question.correctAnswer.answerText}"></span>
-                </button>
-            </li>
-
-            <!-- Display wrong answers -->
-            <li th:each="wrongAnswer : ${question.wrongAnswers}">
-                <button type="button" class="btn-cat answer-button" data-value="${wrongAnswer.answerText}">
-                    <span th:text="${wrongAnswer.answerText}"></span>
+            <li th:each="answer : ${question.answersList}">
+                <button type="button" class="btn-cat answer-button" th:attr="data-value=${answer.answerText}">
+                    <span th:text="${answer.answerText}"></span>
                 </button>
             </li>
         </ul>
 
-        <!-- Hidden Input for selected answer -->
-        <input type="hidden" name="answer" value="">
+        <input type="hidden" name="selectedAnswer" value="">
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary submit-btn">Submit Answer</button>
+        <div style="display: flex; justify-content: center">
+            <button type="submit" class="btn submit-btn">Submit Answer</button>
+        </div>
     </form>
 </div>
+<div class="quit-quiz"><a href="/">Quit</a></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeo8tLpeFfnfIC0e9S8E5bzCk3wJ31WfX9FhGVrV2F7Lkp5g" crossorigin="anonymous"></script>
 

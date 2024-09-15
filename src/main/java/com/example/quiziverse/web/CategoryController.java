@@ -1,7 +1,6 @@
 package com.example.quiziverse.web;
 
 import com.example.quiziverse.model.Category;
-import com.example.quiziverse.model.Question;
 import com.example.quiziverse.service.CategoryService;
 import com.example.quiziverse.service.QuestionService;
 import org.springframework.stereotype.Controller;
@@ -33,7 +32,6 @@ public class CategoryController {
 
     @PostMapping("/chooseCategory")
     public RedirectView chooseCategory(@RequestParam("categoryName") String categoryName) {
-        // Redirect to the quiz page with the selected category
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/quiz?category=" + categoryName);
         return redirectView;
