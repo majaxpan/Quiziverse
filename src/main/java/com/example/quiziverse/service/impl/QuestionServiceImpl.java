@@ -10,6 +10,7 @@ import org.apache.jena.query.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -82,7 +83,16 @@ public class QuestionServiceImpl implements QuestionService {
         question.setUri(questionUri);
         question.setQuestionText(questionText);
         question.setCorrectAnswer(correctAnswer);
-        question.setWrongAnswers(wrongAnswers);
+
+        //putting 3 wrong answers in the list
+        List<Answer> allAnswersList = new ArrayList<>(wrongAnswers);
+        //adding the correct answer in the list
+        allAnswersList.add(correctAnswer);
+        //shuffling the list so the correct answer is on different position
+        Collections.shuffle(allAnswersList);
+
+        //adding the answer list to the question
+        question.setAnswersList(allAnswersList);
 
         questions.add(question);
     }

@@ -19,9 +19,9 @@ public class QuestionRestController {
     }
 
     // Endpoint to get ten questions based on category
-    @GetMapping("/category/{categoryUri}")
-    public List<Question> getQuestionsByCategory(@PathVariable String categoryUri) {
-        return questionService.getTenQuestions(categoryUri);
+    @GetMapping("/category/{categoryName}")
+    public List<Question> getQuestionsByCategory(@PathVariable String categoryName) {
+        return questionService.getTenQuestions(categoryName);
     }
 }
 
